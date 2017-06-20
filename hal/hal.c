@@ -335,7 +335,6 @@ void hal_failed ()
 	delay_ms(9);
 	}
 	spi_cs_set(radio);
-	//while(spi_read_write_byte(0x81)!=0x80);
 	NVIC_SystemReset();
 	// HALT...
     hal_sleep();
