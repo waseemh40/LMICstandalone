@@ -91,10 +91,8 @@ static void hal_io_init ()
 
 	NVIC_EnableIRQ(GPIO_ODD_IRQn);
 	NVIC_EnableIRQ(GPIO_EVEN_IRQn);
-	//debug_str("Here shit\n");
 }
 
-// val ==1  => tx 1, rx 0 ; val == 0 => tx 0, rx 1
 void hal_pin_rxtx (u1_t val)
 {
 	//not used in PA52 nor PA53
@@ -113,8 +111,6 @@ void hal_pin_nss (u1_t val)
 // set radio RST pin to given value (or keep floating!)
 void hal_pin_rst (u1_t val)
 {
-	//NVIC_SystemReset();
-	//delay_ms(7);
 	return;
 }
 #define NUM_DIO 5
@@ -156,18 +152,8 @@ static void hal_spi_init ()
 u1_t hal_spi (u1_t out)
 {
 	u1_t	ret_val=0;
-	//char	my_str[10];
 	ret_val=spi_read_write_byte(out);
-	//USART_Tx(SPI_USART, out);
-	//ret_val=USART_Rx(SPI_USART);;
-	//spi_write_byte(out);
-	//ret_val=spi_read_byte();
-	//sprintf(my_str,"S=%2x\tR=%2x\n",out,ret_val);
-	//debug_str(my_str);
 	return ret_val;
-	/* For every byte sent, one is received */
-	//USART_Tx(SPI_USART, out);
-	//return USART_Rx(SPI_USART);
 }
 
 
@@ -285,21 +271,13 @@ u1_t hal_checkTimer (u4_t time)
 // -----------------------------------------------------------------------------
 // IRQ
 static uint8_t irqlevel = 0;
-static int count_int=0;
 static bool int_flag=false;
 
 CORE_DECLARE_IRQ_STATE;
 void hal_disableIRQs ()
 {
-	char buf[32];
-	count_int++;
-	//sprintf(buf,"\t\t\t\tIRQ Dis count=%d\n",count_int);
-	//debug_str(buf);
 	if(int_flag==false){
 		int_flag=true;
-		//sprintf(buf,"\t\t\t\tIRQ Disabling count=%d\n",count_int);
-		//debug_str(buf);
-		//INT_Disable();
 		CORE_ENTER_ATOMIC();
 	}
 	 irqlevel++;
@@ -310,19 +288,11 @@ void hal_disableIRQs ()
 
 void hal_enableIRQs ()
 {
-	char buf[32];
-	count_int++;
-	//sprintf(buf,"\t\t\t\tIRQ En_OUT %d count=%d\n",irqlevel,count_int);
-	//debug_str(buf);
+
 
 	if(--irqlevel == 0) {
 		CORE_EXIT_ATOMIC();
-		//INT_Enable();
 		int_flag=false;
-		//delay_ms(7);
-		//sprintf(buf,"\t\t\t\tIRQ Enabling count=%d\n",irqlevel);
-		//debug_str(buf);
-		//hal_io_check();
 	}
 	return;
 }
