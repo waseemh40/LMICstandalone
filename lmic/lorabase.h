@@ -12,7 +12,6 @@
 #ifndef _lorabase_h_
 #define _lorabase_h_
 #include "config.h"
-
 // ================================================================================
 // BEG: Keep in sync with lorabase.hpp
 //

@@ -11,7 +11,6 @@
 
 //! \file
 #include "lmic.h"
-//#include "lorabase.h"
 
 #if !defined(MINRX_SYMS)
 #define MINRX_SYMS 5

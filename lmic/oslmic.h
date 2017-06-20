@@ -36,9 +36,6 @@ typedef const char* str_t;
 
 #include <string.h>
 #include "hal.h"
-
-#define CFG_noassert true
-
 #define EV(a,b,c) /**/
 #define DO_DEVDB(field1,field2) /**/
 #if !defined(CFG_noassert)

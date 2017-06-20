@@ -11,7 +11,6 @@
 
 #include "lmic.h"
 
-
 // RUNTIME STATE
 static struct {
     osjob_t* scheduledjobs;

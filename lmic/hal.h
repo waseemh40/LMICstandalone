@@ -13,7 +13,6 @@
 #define _hal_hpp_
 
 #include "oslmic.h"
-
 /*
  * initialize hardware (IO, SPI, TIMER, IRQ).
  */

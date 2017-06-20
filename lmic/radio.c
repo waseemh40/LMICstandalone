@@ -259,14 +259,12 @@ static u1_t randbuf[16];
 #error Missing CFG_sx1272_radio/CFG_sx1276_radio
 #endif
 
-char buf[32];
+
 static void writeReg (u1_t addr, u1_t data ) {
     hal_pin_nss(0);
     hal_spi(addr | 0x80);
     hal_spi(data);
     hal_pin_nss(1);
-    //sprintf(buf,"W:A=%2x V=%2x\n",addr,data);
-    //debug_str(buf);
 }
 
 static u1_t readReg (u1_t addr) {
@@ -274,8 +272,6 @@ static u1_t readReg (u1_t addr) {
     hal_spi(addr & 0x7F);
     u1_t val = hal_spi(0x00);
     hal_pin_nss(1);
-    //sprintf(buf,"R:A=%2x V=%2x\n",addr,val);
-    //debug_str(buf);
     return val;
 }
 
@@ -738,12 +734,10 @@ void radio_irq_handler (u1_t dio) {
     if( (readReg(RegOpMode) & OPMODE_LORA) != 0) { // LORA modem
         u1_t flags = readReg(LORARegIrqFlags);
         if( flags & IRQ_LORA_TXDONE_MASK ) {
-        	debug_str("\t\tTX DONE\n");
             // save exact tx time
             LMIC.txend = now - us2osticks(43); // TXDONE FIXUP
         } else if( flags & IRQ_LORA_RXDONE_MASK ) {
-        	debug_str("\t\tRX DONE\n");
-        	// save exact rx time
+            // save exact rx time
             if(getBw(LMIC.rps) == BW125) {
                 now -= LORA_RXDONE_FIXUP[getSf(LMIC.rps)];
             }
@@ -759,7 +753,6 @@ void radio_irq_handler (u1_t dio) {
             LMIC.snr  = readReg(LORARegPktSnrValue); // SNR [dB] * 4
             LMIC.rssi = readReg(LORARegPktRssiValue) - 125 + 64; // RSSI [dBm] (-196...+63)
         } else if( flags & IRQ_LORA_RXTOUT_MASK ) {
-        	debug_str("\t\tTTIMEOUT DONE\n");
             // indicate timeout
             LMIC.dataLen = 0;
         }

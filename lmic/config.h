@@ -80,5 +80,4 @@
 // also about twice as slow as the original).
 //#define USE_IDEETRON_AES
 //#define USE_IDEETRON_AES 	false
-#define USE_ORIGINAL_AES	true
 #endif // _lmic_config_h_

@@ -18,7 +18,6 @@
 #include "oslmic.h"
 #include "lorabase.h"
 
-
 // LMIC version
 #define LMIC_VERSION_MAJOR 1
 #define LMIC_VERSION_MINOR 5
