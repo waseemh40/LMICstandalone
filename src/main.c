@@ -14,6 +14,7 @@
 //////////////////////////////////////////////////
 // LoRaWAN Application identifier (AppEUI)
 // Not used in this example
+	//my gateway EUIs
 static const u1_t APPEUI[8]  = { 0x88,	0x99,	0x11,	0x55,	0x44,	0x22,	0x11,	0x00};
 
 // LoRaWAN DevEUI, unique device ID (LSBF)
@@ -24,6 +25,21 @@ static const u1_t DEVEUI[8]  = { 0x00,	0x80,	0x00,	0x00,	0x00,	0x00,	0x78,	0x86}
 // Use this key for The Things Network
 //static const u1_t DEVKEY[16] = {0x88,	0x00,	0x77,	0x00,	0x66,	0x00,	0x55,	0x00,	0x44,	0x00,	0x33,	0x00,	0x22,	0x00,	0x11,	0x00};
 static const u1_t DEVKEY[16] = {0x00,	0x11,	0x00,	0x22,	0x00,	0x33,	0x00,	0x44,	0x00,	0x55,	0x00,	0x66,	0x00,	0x77,	0x00,	0x88};
+
+/*
+	//TTN EUIs
+static const u1_t DEVEUI[8]  = { 0x46,	0x59,	0x00,	0xF0,	0x7E,	0xD5,	0xB3,	0x70};
+
+// LoRaWAN DevEUI, unique device ID (LSBF)
+// Not used in this example
+static const u1_t APPEUI[8]  = { 0x46,	0x59,	0x00,	0xF0,	0x7E,	0xD5,	0xB3,	0x70};
+
+// LoRaWAN NwkSKey, network session key
+// Use this key for The Things Network
+//static const u1_t DEVKEY[16] = {0x88,	0x00,	0x77,	0x00,	0x66,	0x00,	0x55,	0x00,	0x44,	0x00,	0x33,	0x00,	0x22,	0x00,	0x11,	0x00};
+static const u1_t DEVKEY[16] = {0x9C,	0x6F,	0xC7,	0x34,	0xA1,	0x22,	0x4C,	0x54,	0x15,	0xFB,	0x78,	0x09,	0x90,	0x83,	0xA3,	0x6E};
+*/
+
 //////////////////////////////////////////////////
 // APPLICATION CALLBACKS
 //////////////////////////////////////////////////
@@ -51,8 +67,18 @@ void os_getDevKey (u1_t* buf) {
 // initial job
 // initial job
 static int tx_function (void) {
-	unsigned char buf[32];
-	sprintf((char*)buf,"insh A ALLAH tx msg\n");
+	unsigned char buf[220];
+	sprintf((char*)buf,"insh A ALLAH txt msg will be reveiced\n");// in good form and time will be much lesser I think so. Hello world this is Things Network for TTK8108 course...insh A ALLAH txt msg will be reveiced in good form\n");
+	int channel=4;
+	LMIC_setupBand(BAND_AUX,14,100);
+	LMIC_setupChannel(4,868500000,DR_RANGE_MAP(DR_SF12,DR_SF7),BAND_AUX);
+	for(int i=0; i<9; i++) { // For EU; for US use i<71
+	  if(i != channel) {
+	    LMIC_disableChannel(i);
+	  }
+	}
+	LMIC_setDrTxpow(DR_SF7, 7);
+	LMIC_setAdrMode(false);
 	return (LMIC_setTxData2(2,buf,strlen((char*)buf),1));
 }
 
@@ -126,7 +152,8 @@ static void blinkfunc (osjob_t* j) {
     ledstate = !ledstate;
     debug_led(ledstate);
     // reschedule blink job
-    os_setTimedCallback(j, os_getTime()+sec2osticks(1), blinkfunc);
+    tx_function();
+    os_setTimedCallback(j, os_getTime()+sec2osticks(20), blinkfunc);
 }
 
 
@@ -147,7 +174,7 @@ void onEvent (ev_t ev) {
       // network joined, session established
       case EV_JOINED:
     	  debug_str("EV_JOINED\n");
-    	  tx_function();
+    	  blinkfunc(&blinkjob);
           break;
       //transmission complete
       case EV_TXCOMPLETE:

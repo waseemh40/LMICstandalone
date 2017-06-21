@@ -299,7 +299,7 @@ void hal_enableIRQs ()
 
 void hal_sleep ()
 {
-	//EMU_EnterEM2(false);
+	EMU_EnterEM2(false);
 }
 
 // -----------------------------------------------------------------------------

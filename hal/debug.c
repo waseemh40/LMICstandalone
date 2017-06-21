@@ -62,7 +62,7 @@ void debug_uint (u4_t v) {
 
 void debug_str (const u1_t* str) {
 	rs232_transmit_string(str,(uint8_t)strlen((char *)str));
-	//delay_ms(1);
+	delay_ms(1);
 }
 
 void debug_val (const u1_t* label, u4_t val) {
@@ -73,7 +73,7 @@ void debug_val (const u1_t* label, u4_t val) {
 }
 
 void debug_event (int ev) {
-	char buf[32];
+	//char buf[32];
     static const char* evnames[] = {
         [EV_SCAN_TIMEOUT]   = "SCAN_TIMEOUT",
         [EV_BEACON_FOUND]   = "BEACON_FOUND",
@@ -91,6 +91,6 @@ void debug_event (int ev) {
         [EV_LINK_DEAD]      = "LINK_DEAD",
         [EV_LINK_ALIVE]     = "LINK_ALIVE",
     };
-    sprintf(buf,"ev=%d %s\r\n",ev,evnames[ev]);
-    debug_str((unsigned char*)buf);
+    //sprintf(buf,"\tev=%d %s\t\n",ev,evnames[ev]);
+    debug_str(evnames);
 }
